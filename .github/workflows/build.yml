@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04  # Use Ubuntu 20.04 for better compatibility
+          - os: ubuntu-22.04  # Ubuntu 22.04 LTS for good compatibility
             artifact_name: battlecam
             asset_name: battlecam-linux-x86_64
           - os: windows-latest
