@@ -18,7 +18,7 @@ A simple, cross-platform desktop application for conference speakers to display 
 
 **No Python installation required!** Download the latest release for your platform:
 
-👉 **[Download Latest Release](https://github.com/yourusername/battlecam2/releases/latest)**
+👉 **[Download Latest Release](https://github.com/soukicz/battlecam/releases/latest)**
 
 - **Windows**: `battlecam-windows-x86_64.exe` (~150-250 MB)
 - **macOS**: `BattleCam-macos.dmg` (~200-300 MB)
