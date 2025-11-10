@@ -1,0 +1,172 @@
+name: Build Executables
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-20.04  # Use Ubuntu 20.04 for better compatibility
+            artifact_name: battlecam
+            asset_name: battlecam-linux-x86_64
+          - os: windows-latest
+            artifact_name: battlecam.exe
+            asset_name: battlecam-windows-x86_64.exe
+          - os: macos-latest
+            artifact_name: BattleCam.app
+            asset_name: BattleCam-macos.dmg
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --clean --noconfirm battlecam.spec
+
+      - name: Create DMG (macOS only)
+        if: runner.os == 'macOS'
+        run: |
+          brew install create-dmg
+          create-dmg \
+            --volname "BattleCam2 Installer" \
+            --volicon "dist/BattleCam.app/Contents/Resources/icon.icns" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --app-drop-link 425 120 \
+            "BattleCam-macos.dmg" \
+            "dist/BattleCam.app" || \
+          create-dmg \
+            --volname "BattleCam2 Installer" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --app-drop-link 425 120 \
+            "BattleCam-macos.dmg" \
+            "dist/BattleCam.app"
+
+      - name: Prepare artifacts (Linux/Windows)
+        if: runner.os != 'macOS'
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            chmod +x dist/battlecam
+            mv dist/battlecam battlecam-linux-x86_64
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            mv dist/battlecam.exe battlecam-windows-x86_64.exe
+          fi
+        shell: bash
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: |
+            battlecam-linux-x86_64
+            battlecam-windows-x86_64.exe
+            BattleCam-macos.dmg
+          if-no-files-found: ignore
+          retention-days: 90
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts (debug)
+        run: |
+          echo "Contents of artifacts directory:"
+          find artifacts -type f
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release
+          find artifacts -type f -exec cp {} release/ \;
+          ls -lh release/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release/*
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ## BattleCam2 Release ${{ github.ref_name }}
+
+            Download the appropriate file for your platform:
+
+            - **Windows**: `battlecam-windows-x86_64.exe`
+            - **macOS**: `BattleCam-macos.dmg`
+            - **Linux**: `battlecam-linux-x86_64`
+
+            ### Installation
+
+            #### Windows
+            1. Download `battlecam-windows-x86_64.exe`
+            2. Double-click to run (Windows may show a security warning - click "More info" → "Run anyway")
+            3. Run from command line: `battlecam-windows-x86_64.exe --nickname "Your Name" --camera 0`
+
+            #### macOS
+            1. Download `BattleCam-macos.dmg`
+            2. Open the DMG and drag BattleCam to Applications
+            3. Right-click BattleCam → Open (first time only, to bypass Gatekeeper)
+            4. Grant camera permissions when prompted
+            5. Run from Terminal: `/Applications/BattleCam.app/Contents/MacOS/BattleCam --nickname "Your Name" --camera 0`
+
+            #### Linux
+            1. Download `battlecam-linux-x86_64`
+            2. Make executable: `chmod +x battlecam-linux-x86_64`
+            3. Run: `./battlecam-linux-x86_64 --nickname "Your Name" --camera 0`
+
+            ### Usage
+
+            ```bash
+            # List available cameras
+            battlecam --list-cameras
+
+            # Start with default size (320x240)
+            battlecam --nickname "Your Name" --camera 0
+
+            # Custom size
+            battlecam --nickname "Your Name" --camera 0 --width 640 --height 480
+            ```
+
+            ### Controls
+            - **ESC** or **Q**: Quit
+            - **Click & Drag**: Move window
+
+            No Python installation required!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
