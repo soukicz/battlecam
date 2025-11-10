@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 """
-BattleCam2 PyInstaller Specification File
+Battlecam PyInstaller Specification File
 Optimized build configuration for cross-platform distribution
 """
 
@@ -111,8 +111,8 @@ if sys.platform == 'darwin':  # macOS
             'NSCameraUsageDescription': 'BattleCam needs access to your camera to display video feed for conference presentations',
             'CFBundleShortVersionString': '1.0.0',
             'CFBundleVersion': '1.0.0',
-            'CFBundleName': 'BattleCam2',
-            'CFBundleDisplayName': 'BattleCam2',
+            'CFBundleName': 'Battlecam',
+            'CFBundleDisplayName': 'Battlecam',
             'NSHighResolutionCapable': True,
             'LSMinimumSystemVersion': '10.13.0',  # macOS High Sierra or later
         },

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build script for BattleCam2
+Build script for Battlecam
 Creates standalone executables using PyInstaller
 """
 
@@ -28,7 +28,7 @@ def install_pyinstaller():
 def build_executable():
     """Build standalone executable"""
     system = platform.system()
-    print(f"Building BattleCam2 for {system}...")
+    print(f"Building Battlecam for {system}...")
     print("Using optimized .spec file configuration")
     print("This may take 2-5 minutes...\n")
 
@@ -111,7 +111,7 @@ def build_executable():
 
 def main():
     """Main build function"""
-    print("BattleCam2 Build Script")
+    print("Battlecam Build Script")
     print("="*60)
 
     # Check if PyInstaller is installed

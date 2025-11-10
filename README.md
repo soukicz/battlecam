@@ -1,4 +1,4 @@
-# BattleCam2
+# Battlecam
 
 A simple, cross-platform desktop application for conference speakers to display their webcam feed in an always-on-top, borderless window alongside their presentation.
 
@@ -238,7 +238,7 @@ pip install --upgrade pyinstaller
 ## Project Structure
 
 ```
-battlecam2/
+battlecam/
 ├── .github/
 │   └── workflows/
 │       └── build.yml           # GitHub Actions CI/CD

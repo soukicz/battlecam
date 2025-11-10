@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BattleCam2 - Conference Webcam Overlay Application
+Battlecam - Conference Webcam Overlay Application
 A simple, cross-platform app for displaying webcam feed in an always-on-top window.
 """
 
@@ -13,7 +13,7 @@ import platform
 
 
 class BattleCam:
-    """Main application class for BattleCam2"""
+    """Main application class for Battlecam"""
 
     def __init__(self, nickname, camera, width=320, height=240):
         self.nickname = nickname
@@ -35,7 +35,7 @@ class BattleCam:
 
         # Initialize Tkinter window
         self.root = tk.Tk()
-        self.root.title(f"BattleCam2 - {nickname}")
+        self.root.title(f"Battlecam - {nickname}")
 
         # Make window borderless and always on top
         self.root.overrideredirect(True)
@@ -167,7 +167,7 @@ class BattleCam:
 
     def run(self):
         """Start the application"""
-        print(f"BattleCam2 started - {self.nickname}")
+        print(f"Battlecam started - {self.nickname}")
         print(f"Camera: {self.camera_index}")
         print("Press ESC or Q to quit")
         print("Click and drag to move window")
@@ -220,7 +220,7 @@ def list_cameras(max_cameras=10):
 def print_help():
     """Print usage help"""
     help_text = """
-BattleCam2 - Conference Webcam Overlay Application
+Battlecam - Conference Webcam Overlay Application
 
 USAGE:
     battlecam --nickname <name> --camera <index>
@@ -259,7 +259,7 @@ PURPOSE:
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
-        description='BattleCam2 - Conference Webcam Overlay',
+        description='Battlecam - Conference Webcam Overlay',
         add_help=False
     )
 

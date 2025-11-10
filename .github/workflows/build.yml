@@ -50,7 +50,7 @@ jobs:
         run: |
           brew install create-dmg
           create-dmg \
-            --volname "BattleCam2 Installer" \
+            --volname "Battlecam Installer" \
             --volicon "dist/BattleCam.app/Contents/Resources/icon.icns" \
             --window-pos 200 120 \
             --window-size 600 400 \
@@ -59,7 +59,7 @@ jobs:
             "BattleCam-macos.dmg" \
             "dist/BattleCam.app" || \
           create-dmg \
-            --volname "BattleCam2 Installer" \
+            --volname "Battlecam Installer" \
             --window-pos 200 120 \
             --window-size 600 400 \
             --icon-size 100 \
@@ -124,7 +124,7 @@ jobs:
           prerelease: false
           generate_release_notes: true
           body: |
-            ## BattleCam2 Release ${{ github.ref_name }}
+            ## Battlecam Release ${{ github.ref_name }}
 
             Download the appropriate file for your platform:
 

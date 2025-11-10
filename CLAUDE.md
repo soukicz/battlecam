@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BattleCam2 is a cross-platform desktop application for conference speakers to display their webcam feed in an always-on-top, borderless window. It's a single-file Python application with PyInstaller-based distribution.
+Battlecam is a cross-platform desktop application for conference speakers to display their webcam feed in an always-on-top, borderless window. It's a single-file Python application with PyInstaller-based distribution.
 
 **Tech Stack:**
 - Python 3.8+ with Tkinter (GUI)
